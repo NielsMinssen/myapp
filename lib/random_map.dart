@@ -13,15 +13,27 @@ class RandomWorldMapGenerator extends StatefulWidget {
 
 class _RandomWorldMapGeneratorState extends State<RandomWorldMapGenerator> {
   List<Color> colors = [
-    Colors.indigo.shade900,
-    Colors.blue,
-    Colors.pink,
-    Colors.red.shade900,
-    Colors.black,
-    Colors.black,
-    Colors.black,
-    Colors.black,
-  ];
+  Colors.indigo.shade900,
+  Colors.blue.shade400,
+  Colors.pink.shade300,
+  Colors.red.shade700,
+  Colors.teal.shade500,
+  Colors.orange.shade600,
+  Colors.purple.shade800,
+  Colors.green.shade700,
+  Colors.yellow.shade600,
+  Colors.cyan.shade500,
+  Colors.amber.shade700,
+  Colors.deepPurple.shade400,
+  Colors.lime.shade800,
+  Colors.lightBlue.shade300,
+  Colors.deepOrange.shade400,
+  Colors.pink.shade200,
+  Colors.brown.shade400,
+  Colors.grey.shade700,
+  Colors.blueGrey.shade500,
+];
+
 
   final _random = Random();
 
