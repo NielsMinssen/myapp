@@ -6,7 +6,9 @@ class CountryDetailScreen extends StatefulWidget {
   final String countryName;
   final Function onVisitedChanged;
 
-  CountryDetailScreen({Key? key, required this.countryName, required this.onVisitedChanged}) : super(key: key);
+  CountryDetailScreen(
+      {Key? key, required this.countryName, required this.onVisitedChanged})
+      : super(key: key);
 
   @override
   _CountryDetailScreenState createState() => _CountryDetailScreenState();
@@ -30,19 +32,30 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
         title: Text('Country Details'),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Text('Have you visited ${widget.countryName}?'),
-          Checkbox(
+          Container(
+            alignment: Alignment.topCenter, // Aligns the child to the top-left of the container
+            padding: const EdgeInsets.all(10), // Adds padding inside the container
+            margin: const EdgeInsets.all(10), // Adds margin outside the container
+            child: Text(
+              'Have you visited ${widget.countryName}?',
+              style: const TextStyle(fontSize: 30.0),
+            ),
+          ),
+          Transform.scale(
+            scale: 3,
+          child: Checkbox(
             value: _visited,
             onChanged: (bool? value) {
               Provider.of<VisitedCountriesProvider>(context, listen: false)
-        .toggleCountryVisited(widget.countryName);
+                  .toggleCountryVisited(widget.countryName);
               setState(() {
                 _visited = value!;
               });
               widget.onVisitedChanged(widget.countryName, _visited);
             },
+          ),
           ),
         ],
       ),

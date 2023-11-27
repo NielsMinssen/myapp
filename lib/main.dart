@@ -47,6 +47,7 @@ class _MyHomePageState extends State<MyHomePage>
   Widget build(BuildContext context) {
      var visitedCountriesProvider = Provider.of<VisitedCountriesProvider>(context);
      double progress = visitedCountriesProvider.visitedCount / 151;
+     double progressPercentage = progress *100;
     return Scaffold(
         appBar: AppBar(
             title: const Text('Countries World Map',
@@ -57,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage>
     body: Column(
       children: [
         LinearProgressIndicator(value: progress),
+        Text('${progressPercentage.toStringAsFixed(2)} % du monde exploré !'),
           Expanded(child: TabBarView(
               physics: const NeverScrollableScrollPhysics(),
               controller: controller,
