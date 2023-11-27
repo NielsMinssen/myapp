@@ -1,10 +1,16 @@
 import 'random_map.dart';
-//import 'package:example/pages/supported_countries_map.dart';
+import 'visited_countries_provider.dart';//import 'package:example/pages/supported_countries_map.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(SMapExampleApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => VisitedCountriesProvider(),
+      child: SMapExampleApp(),
+    ),
+  );
 }
 
 class SMapExampleApp extends StatelessWidget {
@@ -39,6 +45,8 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
+     var visitedCountriesProvider = Provider.of<VisitedCountriesProvider>(context);
+     double progress = visitedCountriesProvider.visitedCount / 151;
     return Scaffold(
         appBar: AppBar(
             title: const Text('Countries World Map',
@@ -46,10 +54,10 @@ class _MyHomePageState extends State<MyHomePage>
             backgroundColor: Colors.transparent,
             elevation: 0,
            ),
-        body: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: TabBarView(
+    body: Column(
+      children: [
+        LinearProgressIndicator(value: progress),
+          Expanded(child: TabBarView(
               physics: const NeverScrollableScrollPhysics(),
               controller: controller,
               children: [
@@ -57,6 +65,7 @@ class _MyHomePageState extends State<MyHomePage>
                 RandomWorldMapGenerator(),
                 // AfricaContinent()
               ]),
-        ));
+        )
+      ]));
   }
 }

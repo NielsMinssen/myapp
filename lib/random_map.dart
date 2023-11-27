@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:countries_world_map/countries_world_map.dart';
 import 'package:countries_world_map/data/maps/world_map.dart';
 import 'package:flutter/material.dart';
+import 'country_detail_screen.dart';
 
 class RandomWorldMapGenerator extends StatefulWidget {
   RandomWorldMapGenerator({Key? key}) : super(key: key);
@@ -60,8 +61,15 @@ class _RandomWorldMapGeneratorState extends State<RandomWorldMapGenerator> {
                     child: SimpleMap(
                       countryBorder: CountryBorder(color: Colors.white),
                       instructions: SMapWorld.instructionsMercator,
-                      callback: (id, name, tabDetails) {
-                        print(id + name);
+                      callback: (id, name, tapDetails) {
+  Navigator.of(context).push(MaterialPageRoute(
+    builder: (context) => CountryDetailScreen(
+      countryName: id,
+      onVisitedChanged: (String countryName, bool visited) {
+        // Handle the state change for visited countries
+      },
+    ),
+  ));
                       },
                       colors: SMapWorldColors(
                         aD: colors[_random.nextInt(8)],
