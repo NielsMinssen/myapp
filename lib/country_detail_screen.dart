@@ -1,3 +1,5 @@
+import 'package:countries_world_map/data/maps/continents/africa.dart';
+import 'package:countries_world_map/data/maps/world_map.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'visited_countries_provider.dart';

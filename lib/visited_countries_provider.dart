@@ -5,6 +5,9 @@ class VisitedCountriesProvider with ChangeNotifier {
   final Set<String> _visitedCountries = {};
 
  int get visitedCount => _visitedCountries.length;
+
+ Set<String> get visitedCountries => _visitedCountries;
+ 
  bool isCountryVisited(String countryName) {
     return _visitedCountries.contains(countryName);
   }
