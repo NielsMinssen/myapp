@@ -25,6 +25,7 @@ class VisitedCountriesProvider with ChangeNotifier {
     _visitedCountries
       ..clear()
       ..addAll(countries);
+       print('Visited countries updated: $_visitedCountries');
     notifyListeners();
   }
 }

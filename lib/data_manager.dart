@@ -8,7 +8,7 @@ class FirestoreService {
     String? userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId != null) {
       await _db.collection('users').doc(userId).set({
-        'visitedCountries': countries.toList(),
+        'visitedCountries': countries,
       });
     }
   }
@@ -16,10 +16,25 @@ class FirestoreService {
   Future<Set<String>> loadVisitedCountries() async {
     String? userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId != null) {
-      DocumentSnapshot snapshot = await _db.collection('users').doc(userId).get();
-      List<dynamic> countries = snapshot.get('visitedCountries');
-      return countries.map<String>((e) => e as String).toSet();
+      try {
+        DocumentSnapshot snapshot =
+            await _db.collection('users').doc(userId).get();
+        List<dynamic> countries = snapshot.get('visitedCountries');
+        print("***************************************************");
+        print(countries);
+        var tmp = countries.map<String>((e) => e as String).toSet();
+        print(tmp);
+        return countries.map<String>((e) => e as String).toSet();
+      } catch (e) {
+        // Log the error or handle it as needed
+        print('Error loading visited countries: $e');
+        return {}; // Return an empty set in case of error
+      }
+    } else {
+      print('No user ID found, returning empty set.');
+      return {}; // Return an empty set if userId is null
     }
-    return {};
+    // This line is unnecessary as all paths now return a value or an empty set
+    // return {};
   }
 }

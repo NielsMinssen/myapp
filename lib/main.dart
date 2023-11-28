@@ -17,7 +17,7 @@ void main() async {
     messagingSenderId: "354516721530",
     projectId: "travelmap-9d849",
   ));
-  //await FirebaseAuth.instance.signOut();
+  await FirebaseAuth.instance.signOut();
   runApp(
     ChangeNotifierProvider(
       create: (context) => VisitedCountriesProvider(),
@@ -42,25 +42,52 @@ class SMapExampleApp extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.active) {
             // Check if the user is logged in
             if (snapshot.hasData) {
-              FirestoreService().loadVisitedCountries().then((visitedCountries) {
-              Provider.of<VisitedCountriesProvider>(context, listen: false).setVisitedCountries(visitedCountries);});
-              // User is logged in, show the main screen
-              return MyHomePage();
+              // Use a FutureBuilder to load and wait for the visited countries
+              // Use a FutureBuilder to load and wait for the visited countries
+              return FutureBuilder(
+                future: FirestoreService().loadVisitedCountries(),
+                builder: (context,
+                    AsyncSnapshot<Set<String>> visitedCountriesSnapshot) {
+                  if (visitedCountriesSnapshot.connectionState ==
+                      ConnectionState.done) {
+                    // Data is loaded, set the visited countries in the provider
+                    if (visitedCountriesSnapshot.hasData) {
+                      // Check for data and error
+                      Provider.of<VisitedCountriesProvider>(context,
+                              listen: false)
+                          .setVisitedCountries(visitedCountriesSnapshot.data!);
+                      return MyHomePage();
+                    } else if (visitedCountriesSnapshot.hasError) {
+                      // Handle error, possibly show an error message or a retry button
+                      return Scaffold(
+                        body: Center(
+                          child:
+                              Text('Error: ${visitedCountriesSnapshot.error}'),
+                        ),
+                      );
+                    }
+                  }
+                  // By default, show a loading spinner
+                  return const Scaffold(
+                    body: Center(child: CircularProgressIndicator()),
+                  );
+                },
+              );
             } else {
               // User is not logged in, show the login screen
+              print("ahjahahahahahahabiiisss");
               return const LoginScreen();
             }
           }
           // Waiting for authentication state to be available
           return const Scaffold(
-            body:  Center(child: CircularProgressIndicator()),
+            body: Center(child: CircularProgressIndicator()),
           );
         },
       ),
     );
   }
 }
-
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
@@ -81,31 +108,29 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
-              var visitedCountriesProvider =
-                  Provider.of<VisitedCountriesProvider>(context);
-              double progress = visitedCountriesProvider.visitedCount / 151;
-              double progressPercentage = progress * 100;
-              return Scaffold(
-                  appBar: AppBar(
-                    title: const Text('Countries World Map',
-                        style: TextStyle(color: Colors.blue)),
-                    backgroundColor: Colors.transparent,
-                    elevation: 0,
-                  ),
-                  drawer: UserInformationDrawer(),
-                  body: Column(children: [
-                    LinearProgressIndicator(value: progress),
-                    Text(
-                        '${progressPercentage.toStringAsFixed(2)} % du monde exploré !'),
-                    Expanded(
-                      child: TabBarView(
-                          physics: const NeverScrollableScrollPhysics(),
-                          controller: controller,
-                          children: [
-                            WorldMapGenerator(),
-                          ]),
-                    )
-                  ])
-                  );
+    var visitedCountriesProvider =
+        Provider.of<VisitedCountriesProvider>(context);
+    double progress = visitedCountriesProvider.visitedCount / 151;
+    double progressPercentage = progress * 100;
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Countries World Map',
+              style: TextStyle(color: Colors.blue)),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        drawer: UserInformationDrawer(),
+        body: Column(children: [
+          LinearProgressIndicator(value: progress),
+          Text('${progressPercentage.toStringAsFixed(2)} % du monde exploré !'),
+          Expanded(
+            child: TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: controller,
+                children: [
+                  WorldMapGenerator(),
+                ]),
+          )
+        ]));
   }
 }
