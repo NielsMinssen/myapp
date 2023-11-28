@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import "user_information.dart";
+import "data_manager.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +42,8 @@ class SMapExampleApp extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.active) {
             // Check if the user is logged in
             if (snapshot.hasData) {
+              FirestoreService().loadVisitedCountries().then((visitedCountries) {
+              Provider.of<VisitedCountriesProvider>(context, listen: false).setVisitedCountries(visitedCountries);});
               // User is logged in, show the main screen
               return MyHomePage();
             } else {
@@ -88,6 +92,7 @@ class _MyHomePageState extends State<MyHomePage>
                     backgroundColor: Colors.transparent,
                     elevation: 0,
                   ),
+                  drawer: UserInformationDrawer(),
                   body: Column(children: [
                     LinearProgressIndicator(value: progress),
                     Text(

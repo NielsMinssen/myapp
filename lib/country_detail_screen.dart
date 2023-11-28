@@ -3,6 +3,7 @@ import 'package:countries_world_map/data/maps/world_map.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'visited_countries_provider.dart';
+import "data_manager.dart";
 
 class CountryDetailScreen extends StatefulWidget {
   final String countryName;
@@ -52,6 +53,7 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
             onChanged: (bool? value) {
               Provider.of<VisitedCountriesProvider>(context, listen: false)
                   .toggleCountryVisited(widget.countryName);
+                  FirestoreService().saveVisitedCountries(Provider.of<VisitedCountriesProvider>(context, listen: false).visitedCountries);
               setState(() {
                 _visited = value!;
               });
