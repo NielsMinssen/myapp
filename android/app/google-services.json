@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "354516721530",
+    "project_id": "travelmap-9d849",
+    "storage_bucket": "travelmap-9d849.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:354516721530:android:7fc6d14624f5d1be8880c3",
+        "android_client_info": {
+          "package_name": "com.example.myapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLlP3QyKHV31A66o-aJTEbluHsEqWUG3E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

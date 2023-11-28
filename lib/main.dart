@@ -2,9 +2,19 @@ import 'random_map.dart';
 import 'visited_countries_provider.dart';//import 'package:example/pages/supported_countries_map.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'login.dart';
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+ await Firebase.initializeApp(
+  options: const FirebaseOptions(
+      apiKey: " AIzaSyDLlP3QyKHV31A66o-aJTEbluHsEqWUG3E ",
+      appId: "1:354516721530:android:7fc6d14624f5d1be8880c3",
+      messagingSenderId: "354516721530",
+      projectId: "travelmap-9d849",
+    ) 
+);
   runApp(
     ChangeNotifierProvider(
       create: (context) => VisitedCountriesProvider(),
@@ -55,6 +65,7 @@ class _MyHomePageState extends State<MyHomePage>
             backgroundColor: Colors.transparent,
             elevation: 0,
            ),
+           drawer: const LoginScreen(),
     body: Column(
       children: [
         LinearProgressIndicator(value: progress),
