@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:myapp/login.dart';
 
 class UserInformationDrawer extends StatelessWidget {
   @override
@@ -29,7 +30,11 @@ class UserInformationDrawer extends StatelessWidget {
             title: Text('Logout'),
             onTap: () async {
               await FirebaseAuth.instance.signOut();
-              Navigator.of(context).pop(); // Close the drawer
+              Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                  ); // Close the drawer
             },
           ),
           // ... add other list tiles for navigation
