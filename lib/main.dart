@@ -17,7 +17,6 @@ void main() async {
     messagingSenderId: "354516721530",
     projectId: "travelmap-9d849",
   ));
-  await FirebaseAuth.instance.signOut();
   runApp(
     ChangeNotifierProvider(
       create: (context) => VisitedCountriesProvider(),
