@@ -1,20 +1,21 @@
 import 'random_map.dart';
-import 'visited_countries_provider.dart';//import 'package:example/pages/supported_countries_map.dart';
+import 'visited_countries_provider.dart'; //import 'package:example/pages/supported_countries_map.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
- await Firebase.initializeApp(
-  options: const FirebaseOptions(
-      apiKey: " AIzaSyDLlP3QyKHV31A66o-aJTEbluHsEqWUG3E ",
-      appId: "1:354516721530:android:7fc6d14624f5d1be8880c3",
-      messagingSenderId: "354516721530",
-      projectId: "travelmap-9d849",
-    ) 
-);
+  await Firebase.initializeApp(
+      options: const FirebaseOptions(
+    apiKey: " AIzaSyDLlP3QyKHV31A66o-aJTEbluHsEqWUG3E ",
+    appId: "1:354516721530:android:7fc6d14624f5d1be8880c3",
+    messagingSenderId: "354516721530",
+    projectId: "travelmap-9d849",
+  ));
+  //await FirebaseAuth.instance.signOut();
   runApp(
     ChangeNotifierProvider(
       create: (context) => VisitedCountriesProvider(),
@@ -28,13 +29,34 @@ class SMapExampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Worldmap Example',
-        theme: ThemeData(
-            primarySwatch: Colors.blue,
-            visualDensity: VisualDensity.adaptivePlatformDensity),
-        home: MyHomePage());
+      title: 'Worldmap Example',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.active) {
+            // Check if the user is logged in
+            if (snapshot.hasData) {
+              // User is logged in, show the main screen
+              return MyHomePage();
+            } else {
+              // User is not logged in, show the login screen
+              return const LoginScreen();
+            }
+          }
+          // Waiting for authentication state to be available
+          return const Scaffold(
+            body:  Center(child: CircularProgressIndicator()),
+          );
+        },
+      ),
+    );
   }
 }
+
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
@@ -49,36 +71,36 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   void initState() {
-    controller = TabController(length: 2, initialIndex: 0, vsync: this);
+    controller = TabController(length: 1, initialIndex: 0, vsync: this);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-     var visitedCountriesProvider = Provider.of<VisitedCountriesProvider>(context);
-     double progress = visitedCountriesProvider.visitedCount / 151;
-     double progressPercentage = progress *100;
-    return Scaffold(
-        appBar: AppBar(
-            title: const Text('Countries World Map',
-                style: TextStyle(color: Colors.blue)),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-           ),
-           drawer: const LoginScreen(),
-    body: Column(
-      children: [
-        LinearProgressIndicator(value: progress),
-        Text('${progressPercentage.toStringAsFixed(2)} % du monde exploré !'),
-          Expanded(child: TabBarView(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: controller,
-              children: [
-                //SupportedCountriesMap(),
-                WorldMapGenerator(),
-                // AfricaContinent()
-              ]),
-        )
-      ]));
+              var visitedCountriesProvider =
+                  Provider.of<VisitedCountriesProvider>(context);
+              double progress = visitedCountriesProvider.visitedCount / 151;
+              double progressPercentage = progress * 100;
+              return Scaffold(
+                  appBar: AppBar(
+                    title: const Text('Countries World Map',
+                        style: TextStyle(color: Colors.blue)),
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                  ),
+                  body: Column(children: [
+                    LinearProgressIndicator(value: progress),
+                    Text(
+                        '${progressPercentage.toStringAsFixed(2)} % du monde exploré !'),
+                    Expanded(
+                      child: TabBarView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          controller: controller,
+                          children: [
+                            WorldMapGenerator(),
+                          ]),
+                    )
+                  ])
+                  );
   }
 }
