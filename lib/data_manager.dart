@@ -7,9 +7,53 @@ class FirestoreService {
   Future<void> saveVisitedCountries(Set<String> countries) async {
     String? userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId != null) {
-      await _db.collection('users').doc(userId).set({
+      await _db.collection('users').doc(userId).update({
         'visitedCountries': countries,
       });
+    }
+  }
+
+  Future<void> saveFirstName(String firstName) async {
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      await _db.collection('users').doc(userId).set({
+        'firstName': firstName,
+      });
+    }
+  }
+
+  Future<void> saveLastName(String lastName) async {
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      await _db.collection('users').doc(userId).update({
+        'lastName': lastName,
+      });
+    }
+  }
+
+  Future<String> getFirstName() async {
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      DocumentSnapshot snapshot =
+          await _db.collection('users').doc(userId).get();
+      String res = snapshot.get('firstName');
+      return res;
+    } else {
+      print('No user ID found, returning empty set.');
+      return ''; // Return an empty String if userId is null
+    }
+  }
+
+    Future<String> getLastName() async {
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      DocumentSnapshot snapshot =
+          await _db.collection('users').doc(userId).get();
+      String res = snapshot.get('lastName');
+      return res;
+    } else {
+      print('No user ID found, returning empty set.');
+      return ''; // Return an empty String if userId is null
     }
   }
 
