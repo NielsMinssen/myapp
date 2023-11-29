@@ -73,6 +73,20 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             TextButton(
               onPressed: () {
+               AuthService().signInWithGoogle();
+               var user = AuthService().signInWithGoogle();
+              if (user != null) {
+                Navigator.pushReplacement<void, void>(
+              context,
+              MaterialPageRoute<void>(
+                builder: (BuildContext context) =>  SMapExampleApp(),));
+              } else {
+              }
+              },
+              child: const Text('Sign In with Google'),
+            ),
+            TextButton(
+              onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => const CreateAccount(),

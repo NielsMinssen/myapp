@@ -93,6 +93,20 @@ class _CreateAccountState extends State<CreateAccount> {
               },
               child: const Text('Create Account'),
             ),
+            TextButton(
+              onPressed: () {
+               AuthService().signInWithGoogle();
+               var user = AuthService().signInWithGoogle();
+              if (user != null) {
+                Navigator.pushReplacement<void, void>(
+              context,
+              MaterialPageRoute<void>(
+                builder: (BuildContext context) =>  SMapExampleApp(),));
+              } else {
+              }
+              },
+              child: const Text('Sign Up with Google'),
+            ),
           ],
         ),
       ),
