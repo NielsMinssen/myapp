@@ -47,6 +47,9 @@ class _CreateAccountState extends State<CreateAccount> {
                 ),
               ),
             ),
+            const SizedBox(
+              height: 30.0,
+            ),
             SizedBox(
               width: MediaQuery.of(context).size.width / 2,
               child: TextField(
